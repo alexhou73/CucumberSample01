@@ -24,7 +24,7 @@ public class Environment {
     protected Properties properties = null;
 
     public Environment() {
-        logger.info("Loading properites from: {}", ENVIRONMENT_SETTINGS);
+        logger.info("Loading properties from: {}", ENVIRONMENT_SETTINGS);
         properties = new Properties();
         try {
 //            properties.load(Thread.currentThread().getClass().getResourceAsStream("/" + ENVIRONMENT_SETTINGS));
