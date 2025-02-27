@@ -20,7 +20,7 @@ public class WebDrivers {
             StringUtils.isNotEmpty(System.getProperty(CHROME_DRIVER_EXECUTABLE_KEY))
                     ? System.getProperty(CHROME_DRIVER_EXECUTABLE_KEY)
                     : Environment.INSTANCE.getPropertyByExactKey("Default_Chrome_Driver");
-    public static WebDriver chromeDriver = getChromeDriver(true);
+    public static WebDriver chromeDriver;
 
     public static WebDriver getChromeDriver() {
         ChromeOptions chromeOptions = new ChromeOptions();

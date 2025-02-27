@@ -3,9 +3,12 @@ package org.example.StepDefinitions;
 import org.example.BaseSteps;
 import org.example.pages.HomePage;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.asserts.SoftAssert;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -13,94 +16,88 @@ import io.cucumber.java.en.When;
 public class PracticeSteps extends BaseSteps {
     private static String url = "https://bonigarcia.dev/selenium-webdriver-java/";
     private SoftAssert softAssert = new SoftAssert();
-    private HomePage homePage = new HomePage();
+    private HomePage homePage = new HomePage(driver);
 
-//    @Before
-//    public void beforeSuite(){
-//        driver.get(url);
-//    }
-//    @After
-//    public void afterSuite(){
-//        driver.quit();
-//    }
+    @Before
+    public void beforeSuite() {
+        driver.get(url);
+    }
+
+    @After
+    public void afterSuite() {
+        driver.quit();
+//        softAssert.assertAll();
+    }
 
     @Given("the user is on the {string} page")
     public void the_user_is_on_the_page(String header) {
         logger.info("the user is on the {} page", header);
-        WebElement pageHeader = homePage.getPageHeader(header);
-        softAssert.assertTrue(pageHeader.getText().contains(header), String.format("Failed: Expected title should be '%s' but '%s'", header, driver.getTitle()));
-        softAssert.assertAll();
+        softAssert.assertTrue(homePage.getPageHeader(header).contains(header),
+                String.format("Failed: Expected title should be '%s' but '%s'", header, driver.getTitle()));
     }
 
     @Given("the user clicks on {string} button")
     public void the_user_clicks_on_button(String button) {
         logger.info("the user clicks on {} button", button);
-        WebElement buttonLink = homePage.getButtonLink(button);
-        buttonLink.click();
+        softAssert.assertTrue(homePage.clickButtonLink(button),
+                String.format("Failed: Web element '%s' not found", button));
     }
 
     @Given("the user on the {string} page")
     public void the_user_on_the_page(String header) {
         logger.info("the user on the {} page", header);
-        softAssert.assertTrue(homePage.userOnPage(header));
-        softAssert.assertAll();
+        softAssert.assertTrue(homePage.userOnPage(header),
+                String.format("Failed: Web element %s not found", header));
     }
 
     @When("the user enters {string} in Text input field")
     public void the_user_enters_in_text_input_field(String text) {
-        // Write code here that turns the phrase above into concrete actions
         logger.info("the user enters {} in Text input field", text);
-        WebElement textBox = homePage.getWebElementById("my-text-id");
-        textBox.sendKeys(text);
+        softAssert.assertTrue(homePage.enterInTextBoxById("my-text-id", text),
+                String.format("Failed: Web element id: %s not found", "my-text-id"));
     }
 
     @When("the user enters {string} in Password field")
     public void the_user_enters_in_password_field(String password) {
-        // Write code here that turns the phrase above into concrete actions
         logger.info("the user enters {} in Password field", password);
-        WebElement form_pwd = homePage.getWebElementByName("my-password");
-        form_pwd.sendKeys(password);
+        softAssert.assertTrue(homePage.enterInTextBoxByName("my-password", password),
+                String.format("Failed: Web element name: %s not found", password));
     }
 
     @When("the user enters {string} in Textareas field")
     public void the_user_enters_in_textares_field(String text) {
-        // Write code here that turns the phrase above into concrete actions
         logger.info("the user enters {string} in Textareas field", text);
-        WebElement form_textarea = homePage.getWebElementByName("my-textarea");
-        form_textarea.sendKeys(text);
+        softAssert.assertTrue(homePage.enterInTextBoxByName("my-textarea", text),
+                String.format("Failed: Web element name: %s not found", text));
     }
 
     @When("the user verifies the radio buttons")
     public void the_user_verifies_the_radio_button() {
-        // Write code here that turns the phrase above into concrete actions
         logger.info("the user verifies the radio buttons");
-
-        WebElement checked_radio = homePage.getWebElementById("my-radio-1");
-        logger.info("radio button {} status: {}", "my-radio-1", checked_radio.isSelected());
-        WebElement default_radio = homePage.getWebElementById("my-radio-2");
-        logger.info("radio button {} status: {}", "my-radio-2", default_radio.isSelected());
+        softAssert.assertTrue(homePage.verifyRadioButtonById("my-radio-1"),
+                String.format("Failed: Web element id: %s not found or value is not correct", "my-radio-1"));
+        softAssert.assertFalse(homePage.verifyRadioButtonById("my-radio-2"),
+                String.format("Failed: Web element id: %s not found or value is not correct", "my-radio-2"));
     }
 
     @When("the user verifies the checkboxes")
     public void the_user_verifies_the_checkboxes() {
-        // Write code here that turns the phrase above into concrete actions
         logger.info("the user verifies the checkboxes");
-        WebElement checked_checkbox = homePage.getWebElementById("my-check-1");
-        logger.info("radio button {} status: {}", "my-check-1", checked_checkbox.isSelected());
-        WebElement default_checkbox = homePage.getWebElementById("my-check-2");
-        logger.info("radio button {} status: {}", "my-check-1", checked_checkbox.isSelected());
+        softAssert.assertTrue(homePage.verifyCheckBoxById("my-check-1"),
+                String.format("Failed: Web element id: %s not found or value is not correct", "my-check-1"));
+        softAssert.assertFalse(homePage.verifyCheckBoxById("my-check-2"),
+                String.format("Failed: Web element id: %s not found or value is not correct", "my-check-2"));
+
     }
 
     @When("verify the user interacts with the page")
     public void verify_the_user_interacts_with_the_page() throws InterruptedException {
-        // Write code here that turns the phrase above into concrete actions
         logger.info("verify the user interacts with the page");
-        WebElement disabled_element = homePage.getWebElementByName("my-disabled");
-        WebElement readonly_element = homePage.getWebElementByName("my-readonly");
-        softAssert.assertEquals(disabled_element.getText(), "Disabled input",
-                String.format("Failed: expected:{}, actual: {}", "Disabled input", disabled_element.getText()));
-        softAssert.assertEquals(readonly_element.getText(), "Readonly input",
-                String.format("Failed: expected:{}, actual: {}", "Readonly input", readonly_element.getText()));
+
+        softAssert.assertFalse(homePage.verifyEnabledTextBoxByName("my-disabled"),
+                String.format("Failed: expected:{}", "Disabled input"));
+        softAssert.assertTrue(homePage.verifyEnabledTextBoxByName("my-readonly"),
+                String.format("Failed: expected:{}", "Readonly input"));
 
         Select dropdownList = new Select(homePage.getWebElementByName("my-select"));
         dropdownList.selectByIndex(2);
@@ -128,7 +125,7 @@ public class PracticeSteps extends BaseSteps {
         int x = width / 2;
         int newx = (int) (width * 0.2);
         logger.info("Slider with: {}, half:{}", width, width / 2);
-//        new Actions(driver).dragAndDropBy(slider,x,0).dragAndDropBy(slider,-newx,0).perform();
+        new Actions(driver).dragAndDropBy(slider, x, 0).dragAndDropBy(slider, -newx, 0).perform();
         logger.info("Range value: {}", slider.getAttribute("value"));
         Thread.sleep(3000);
     }
@@ -147,6 +144,7 @@ public class PracticeSteps extends BaseSteps {
         logger.info("the form is submitted");
         WebElement title = homePage.getWebElementByXpath("//h1[contains(text(),'Form submitted')]");
         softAssert.assertTrue(title.getText().equals("Form submitted"));
+        softAssert.assertAll();
         Thread.sleep(3000);
     }
 
