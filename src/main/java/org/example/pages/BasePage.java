@@ -4,6 +4,8 @@ import org.example.commons.WebDrivers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,6 +141,62 @@ public class BasePage {
             return checkbox.get().isEnabled();
         }
         return false;
+    }
+
+    public void setDropdownListByIndex(String name, int index) {
+        Optional<Select> dropdownList = Optional.ofNullable(new Select(getWebElementByName(name)));
+        if (dropdownList.isPresent()) {
+            dropdownList.get().selectByIndex(index);
+        }
+    }
+
+    public void setDataListByIndex(String name, String dataListId, int index) {
+        Optional<WebElement> selectInput = Optional.ofNullable(getWebElementByName(name));
+        String xpath = String.format("//datalist[@id='%s']/option[%d]", dataListId, index);
+        Optional<WebElement> option = Optional.ofNullable(getWebElementByXpath(xpath));
+        if (selectInput.isPresent() && option.isPresent()) {
+            selectInput.get().clear();
+            selectInput.get().sendKeys(option.get().getAttribute("value"));
+        }
+    }
+
+    public void uploadFile(String name, String fileName) {
+        WebElement fileInput = getWebElementByName(name);
+        fileInput.sendKeys(fileName);
+    }
+
+    public void setColor(String name, String value) {
+        WebElement colorPicker = getWebElementByName(name);
+        colorPicker.sendKeys(value);
+    }
+
+    public void datePicker(String name, String value) {
+        WebElement datePicker = getWebElementByName(name);
+        datePicker.sendKeys(value);
+    }
+
+    public void setSlider(String name, double value) {
+        WebElement slider = getWebElementByName(name);
+        logger.info("Range min:{}, max:{}", slider.getAttribute("min"), slider.getAttribute("max"));
+        logger.info("Range step:{}, value: {}", slider.getAttribute("step"), slider.getAttribute("value"));
+        logger.info("Setting value {} to range:");
+        int width = slider.getSize().getWidth();
+        int x = width / 2;
+        int newx = (int) (width * value);
+        logger.info("Slider with: {}, half:{}", width, width / 2);
+        new Actions(driver).dragAndDropBy(slider, x, 0).dragAndDropBy(slider, -newx, 0).perform();
+        logger.info("Range value: {}", slider.getAttribute("value"));
+    }
+
+    public void clickButton(String name) {
+        Optional<WebElement> button = Optional.ofNullable(driver.findElement(By.xpath("//button[contains(text(),'" + name + "')]")));
+        if (button.isPresent()) {
+            button.get().click();
+        }
+    }
+
+    private void foo() {
+
     }
 
 }

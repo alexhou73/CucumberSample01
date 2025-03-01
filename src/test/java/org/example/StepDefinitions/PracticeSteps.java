@@ -1,10 +1,9 @@
 package org.example.StepDefinitions;
 
+import org.apache.commons.lang3.StringUtils;
 import org.example.BaseSteps;
+import org.example.commons.Environment;
 import org.example.pages.HomePage;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.asserts.SoftAssert;
 
 import io.cucumber.java.After;
@@ -14,7 +13,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class PracticeSteps extends BaseSteps {
-    private static String url = "https://bonigarcia.dev/selenium-webdriver-java/";
+
+    private static final String url = StringUtils.isNotEmpty(System.getProperty("URL"))
+            ?System.getProperty("URL")
+            : Environment.INSTANCE.getPropertyByExactKey("URL");
     private SoftAssert softAssert = new SoftAssert();
     private HomePage homePage = new HomePage(driver);
 
@@ -26,7 +28,7 @@ public class PracticeSteps extends BaseSteps {
     @After
     public void afterSuite() {
         driver.quit();
-//        softAssert.assertAll();
+        softAssert.assertAll();
     }
 
     @Given("the user is on the {string} page")
@@ -94,56 +96,48 @@ public class PracticeSteps extends BaseSteps {
     public void verify_the_user_interacts_with_the_page() throws InterruptedException {
         logger.info("verify the user interacts with the page");
 
+        logger.info("Verifying the disabled textbox...");
         softAssert.assertFalse(homePage.verifyEnabledTextBoxByName("my-disabled"),
                 String.format("Failed: expected:{}", "Disabled input"));
+        logger.info("Verifying the readonly textbox...");
         softAssert.assertTrue(homePage.verifyEnabledTextBoxByName("my-readonly"),
                 String.format("Failed: expected:{}", "Readonly input"));
 
-        Select dropdownList = new Select(homePage.getWebElementByName("my-select"));
-        dropdownList.selectByIndex(2);
+        logger.info("Setting index #2 of the dropdown list...");
+        homePage.setDropdownListByIndex("my-select", 2);
 
-        WebElement selectInput = homePage.getWebElementByName("my-datalist");
-        WebElement option = homePage.getWebElementByXpath("//datalist[@id='my-options']/option[1]");
-        selectInput.clear();
-        selectInput.sendKeys(option.getAttribute("value"));
+        logger.info("Setting index #1 of the datalist...");
+        homePage.setDataListByIndex("my-datalist", "my-options", 1);
 
-        WebElement fileInput = homePage.getWebElementByName("my-file");
-        fileInput.sendKeys("/Users/alex/soapui-settings.xml");
+        logger.info("Uploading File...");
+        homePage.uploadFile("my-file", "/Users/alex/soapui-settings.xml");
 
+        logger.info("Setting color: #00FF00...");
+        homePage.setColor("my-colors", "#00FF00");
 
-        WebElement colorPicker = homePage.getWebElementByName("my-colors");
-        logger.info("Color Picker value: {}", colorPicker.getAttribute("value"));
-        colorPicker.sendKeys("#ff0000");
+        logger.info("Setting date: 02/26/2025...");
+        homePage.datePicker("my-date", "02/26/2025");
 
-        WebElement datePicker = homePage.getWebElementByName("my-date");
-        datePicker.sendKeys("02/26/2025");
-        WebElement slider = homePage.getWebElementByName("my-range");
-        logger.info("Range min:{}, max:{}", slider.getAttribute("min"), slider.getAttribute("max"));
-        logger.info("Range step:{}, value: {}", slider.getAttribute("step"), slider.getAttribute("value"));
-        logger.info("Setting value {} to range:");
-        int width = slider.getSize().getWidth();
-        int x = width / 2;
-        int newx = (int) (width * 0.2);
-        logger.info("Slider with: {}, half:{}", width, width / 2);
-        new Actions(driver).dragAndDropBy(slider, x, 0).dragAndDropBy(slider, -newx, 0).perform();
-        logger.info("Range value: {}", slider.getAttribute("value"));
-        Thread.sleep(3000);
+        logger.info("Setting value in slider...");
+        homePage.setSlider("my-range", 0.2);
+
+        Thread.sleep(5000);
     }
 
     @When("the user submits the page")
     public void the_user_submits_the_page() {
         // Write code here that turns the phrase above into concrete actions
         logger.info("the user submits the page");
-        WebElement form_submit = homePage.getWebElementByXpath("//button[contains(text(),'Submit')]");
-        form_submit.click();
+        homePage.clickButton("Submit");
     }
 
     @Then("the form is submitted")
     public void the_form_is_submitted() throws InterruptedException {
         // Write code here that turns the phrase above into concrete actions
         logger.info("the form is submitted");
-        WebElement title = homePage.getWebElementByXpath("//h1[contains(text(),'Form submitted')]");
-        softAssert.assertTrue(title.getText().equals("Form submitted"));
+        softAssert.assertTrue(homePage.userOnPage("Form submitted"),
+                "Fail! Form is not submitted");
+
         softAssert.assertAll();
         Thread.sleep(3000);
     }
