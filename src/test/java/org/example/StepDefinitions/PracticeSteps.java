@@ -15,7 +15,7 @@ import io.cucumber.java.en.When;
 public class PracticeSteps extends BaseSteps {
 
     private static final String url = StringUtils.isNotEmpty(System.getProperty("URL"))
-            ?System.getProperty("URL")
+            ? System.getProperty("URL")
             : Environment.INSTANCE.getPropertyByExactKey("URL");
     private SoftAssert softAssert = new SoftAssert();
     private HomePage homePage = new HomePage(driver);

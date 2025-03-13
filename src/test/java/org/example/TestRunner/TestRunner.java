@@ -6,7 +6,7 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/Features",
         glue = {"org.example.StepDefinitions"},
-        tags = "@Special",
+        tags = "@Smoke or @General or @Special",
         monochrome = true,
         dryRun = false,
         plugin = {"pretty", "html:target/html/testreport.html"}

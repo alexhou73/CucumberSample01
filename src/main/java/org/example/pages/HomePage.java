@@ -2,6 +2,7 @@ package org.example.pages;
 
 import org.apache.commons.lang3.StringUtils;
 import org.example.commons.Environment;
+import org.example.commons.WebDrivers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,14 +21,13 @@ public class HomePage extends BasePage {
         driver = webDriver;
         PageFactory.initElements(webDriver, this);
     }
-
-    public static String getPageHeader(String header) {
+    public String getPageHeader(String header) {
         Optional<WebElement> pageHeader = Optional.ofNullable(
                 driver.findElement(By.xpath("//h1[contains(text(),'" + header + "')]")));
         return pageHeader.isPresent() ? pageHeader.get().getText() : "";
     }
 
-    public static String getPageTitle() {
+    public String getPageTitle() {
         return driver.getTitle();
     }
 
