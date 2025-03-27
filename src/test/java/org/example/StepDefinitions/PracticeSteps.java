@@ -1,10 +1,7 @@
 package org.example.StepDefinitions;
 
-import org.apache.commons.lang3.StringUtils;
 import org.example.BaseSteps;
-import org.example.commons.Environment;
 import org.example.pages.HomePage;
-import org.testng.asserts.SoftAssert;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -13,11 +10,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class PracticeSteps extends BaseSteps {
-
-    private static final String url = StringUtils.isNotEmpty(System.getProperty("URL"))
-            ? System.getProperty("URL")
-            : Environment.INSTANCE.getPropertyByExactKey("URL");
-    private SoftAssert softAssert = new SoftAssert();
     private HomePage homePage = new HomePage(driver);
 
     @Before

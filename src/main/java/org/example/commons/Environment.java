@@ -27,7 +27,7 @@ public class Environment {
         logger.info("Loading properties from: {}", ENVIRONMENT_SETTINGS);
         properties = new Properties();
         try {
-            properties.load(ClassLoader.class.getResourceAsStream("/" + ENVIRONMENT_SETTINGS));
+            properties.load(this.getClass().getResourceAsStream("/" + ENVIRONMENT_SETTINGS));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
