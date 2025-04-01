@@ -3,15 +3,19 @@ package org.example.pages;
 import org.apache.commons.lang3.StringUtils;
 import org.example.commons.Environment;
 import org.example.commons.WebDrivers;
+import org.example.commons.selenium.ByFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Optional;
 
 public class HomePage extends BasePage {
     private static final String HOME_URL = "url";
+    private static final String PAGE = "HomePage";
     protected final static String homepageURL =
             StringUtils.isNotEmpty(System.getProperty(HOME_URL))
                     ? System.getProperty(HOME_URL)
@@ -20,11 +24,19 @@ public class HomePage extends BasePage {
     public HomePage(WebDriver webDriver) {
         driver = webDriver;
         PageFactory.initElements(webDriver, this);
+        wait = new WebDriverWait(driver,600,5000);
+    }
+
+
+    public boolean userOnPage(String header) {
+        By byH1 = ByFactory.createBy(PAGE,"H1Text", header);
+        WebElement header1 = wait.until(ExpectedConditions.presenceOfElementLocated(byH1));
+        return header1.isEnabled();
     }
     public String getPageHeader(String header) {
-        Optional<WebElement> pageHeader = Optional.ofNullable(
-                driver.findElement(By.xpath("//h1[contains(text(),'" + header + "')]")));
-        return pageHeader.isPresent() ? pageHeader.get().getText() : "";
+        By byH1 = ByFactory.createBy(PAGE, "H1Text", header);
+        WebElement header1 = wait.until(ExpectedConditions.presenceOfElementLocated(byH1));
+        return header1.getText();
     }
 
     public String getPageTitle() {

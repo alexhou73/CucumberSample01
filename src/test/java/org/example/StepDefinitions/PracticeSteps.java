@@ -1,6 +1,8 @@
 package org.example.StepDefinitions;
 
 import org.example.BaseSteps;
+import org.example.commons.Environment;
+import org.example.commons.selenium.ByFactory;
 import org.example.pages.HomePage;
 
 import io.cucumber.java.After;
@@ -15,6 +17,7 @@ public class PracticeSteps extends BaseSteps {
     @Before
     public void beforeSuite() {
         driver.get(url);
+        ByFactory.setLocatorFileName(Environment.INSTANCE.getPropertyByExactKey("locator"));
     }
 
     @After
