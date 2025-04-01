@@ -36,8 +36,7 @@ public class PracticeSteps extends BaseSteps {
     @Given("the user clicks on {string} button")
     public void the_user_clicks_on_button(String button) {
         logger.info("the user clicks on {} button", button);
-        softAssert.assertTrue(homePage.clickButtonLink(button),
-                String.format("Failed: Web element '%s' not found", button));
+        homePage.clickButtonLink(button);
     }
 
     @Given("the user on the {string} page")

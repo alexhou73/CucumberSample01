@@ -15,7 +15,6 @@ import com.google.gson.JsonParser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -69,12 +68,12 @@ public class ByFactory {
     }
 
     private static String locatorFileName;
-    public static HashMap<String,LocatorInfo> locators = new HashMap<>();
+    public static HashMap<String, LocatorInfo> locators = new HashMap<>();
     public static JsonArray locatorArray = new JsonArray();
 
 
     public static void setLocatorFileName(String fileName) {
-        if(!locatorArray.isJsonNull()){
+        if (!locatorArray.isJsonNull()) {
             locatorArray = new JsonArray();
         }
         logger.info("Setting locator file: {}." + fileName);
@@ -90,10 +89,6 @@ public class ByFactory {
 
     public static String getLocatorFileName() {
         return locatorFileName;
-    }
-
-    public static By createBy(String pageName, String elementName, String... replaceValues) {
-        return getBy(getLocator(pageName, elementName, replaceValues));
     }
 
     private static By getBy(LocatorInfo locatorInfo) {
@@ -119,39 +114,98 @@ public class ByFactory {
         }
     }
 
-    private static LocatorInfo getLocator(String pageName, String elementName, String... replaceValues) {
-//        String key = pageName + "_" + elementName + "_" + String.join("_", replaceValues);
-//        key = key.replaceAll("\\s","_");
+    public static By createBy(String pageName, String elementName, String... replaceValues) {
+        return getBy(getLocator(pageName, elementName, replaceValues));
+    }
 
-        String key = String.join("_",pageName,elementName,String.join("_",replaceValues)).replaceAll(" ","_");
-        logger.info("key: {}",key);
-        if(locators.containsKey(key)){
-            logger.info("Cache hit: {}!!!", key);
+    private static LocatorInfo getLocator(String pageName, String elementName, String... replaceValues) {
+        Preconditions.checkArgument(StringUtils.isNotEmpty(pageName), "PageName cannot be empty.");
+        Preconditions.checkArgument(StringUtils.isNotEmpty(elementName), "ElementName cannot be empty");
+
+        String key = String.join("_", pageName, elementName,
+                String.join("_", replaceValues)).replaceAll(" ", "_");
+        logger.debug("Locator key: '{}'", key);
+        if (locators.containsKey(key)) {
+            logger.info("Locator key '{}' is already created!", key);
             return locators.get(key);
         }
-        Preconditions.checkArgument(StringUtils.isNotEmpty(pageName));
-        Preconditions.checkArgument(StringUtils.isNotEmpty(elementName));
-
-//        File file = Util.getCurrentThreadResource(locatorFileName);
-//        Preconditions.checkArgument(file.exists(), "Unable to locate " + locatorFileName);
-        JsonObject foundOjbect = findElementByPageName(pageName, elementName);
-
-        Preconditions.checkState(foundOjbect != null,
-                "No entry found for the page[" + pageName + "] and element[" + elementName +
+        JsonObject foundObject = findElementByPageNameAndElementName(pageName, elementName);
+        Preconditions.checkState(foundObject != null,
+                "No entry found for the page[" + pageName + "], element[" + elementName +
                         "] in the locators file [" + locatorFileName + "]");
-        String locatorUsing = foundOjbect.get("locateUsing").getAsString();
-        String locator = foundOjbect.get("locator").getAsString();
+        String locator = foundObject.get("locator").getAsString();
+        String locatorUsing = foundObject.get("locateUsing").getAsString();
         if (replaceValues != null && replaceValues.length > 0) {
             locator = String.format(locator, replaceValues);
         }
         Preconditions.checkArgument(StringUtils.isNotEmpty(locator), "Locator cannot be null (or) empty.");
-        LocatorInfo locatorInfo = new LocatorInfo(locator,locatorUsing);
+        LocatorInfo locatorInfo = new LocatorInfo(locator, locatorUsing);
         locators.put(key, locatorInfo);
-        logger.info("Locator: {} created.",key);
+        logger.info("Locator: '{}' is created.", key);
         return locatorInfo;
     }
 
-    private static JsonObject findElementByPageName(String pageName, String elementName) {
+    public static By createBy(String pageName, String elementName, Integer... replaceValues) {
+        return getBy(getLocator(pageName, elementName, replaceValues));
+    }
+
+    private static LocatorInfo getLocator(String pageName, String elementName, Integer... replaceValues) {
+        Preconditions.checkArgument(StringUtils.isNotEmpty(pageName), "PageName cannot be empty.");
+        Preconditions.checkArgument(StringUtils.isNotEmpty(elementName), "ElementName cannot be empty");
+        String key = String.join("_", pageName, elementName,
+                String.join("_", Arrays.stream(replaceValues).map(String::valueOf).toArray(String[]::new)));
+        logger.debug("Locator key: '{}'", key);
+        if (locators.containsKey(key)) {
+            logger.info("Locator key '{}' is already created!", key);
+            return locators.get(key);
+        }
+        JsonObject foundObject = findElementByPageNameAndElementName(pageName, elementName);
+        Preconditions.checkState(foundObject != null,
+                "No entry found for the page[" + pageName + "], element[" + elementName +
+                        "] in the locators file [" + locatorFileName + "]");
+        String locator = foundObject.get("locator").getAsString();
+        String locatorUsing = foundObject.get("locateUsing").getAsString();
+        if (replaceValues != null && replaceValues.length > 0) {
+            locator = String.format(locator, replaceValues);
+        }
+        Preconditions.checkArgument(StringUtils.isNotEmpty(locator), "Locator cannot be null (or) empty.");
+        LocatorInfo locatorInfo = new LocatorInfo(locator, locatorUsing);
+        locators.put(key, locatorInfo);
+        logger.info("Locator: '{}' is created.", key);
+        return locatorInfo;
+    }
+
+    public static By createBy(String pageName, String elementName, Double... replaceValues) {
+        return getBy(getLocator(pageName, elementName, replaceValues));
+    }
+
+    private static LocatorInfo getLocator(String pageName, String elementName, Double... replaceValues) {
+        Preconditions.checkArgument(StringUtils.isNotEmpty(pageName), "PageName cannot be empty.");
+        Preconditions.checkArgument(StringUtils.isNotEmpty(elementName), "ElementName cannot be empty");
+        String key = String.join("_", pageName, elementName,
+                String.join("_", Arrays.stream(replaceValues).map(String::valueOf).toArray(String[]::new)));
+        logger.debug("Locator key: '{}'", key);
+        if (locators.containsKey(key)) {
+            logger.info("Locator key '{}' is already created!", key);
+            return locators.get(key);
+        }
+        JsonObject foundObject = findElementByPageNameAndElementName(pageName, elementName);
+        Preconditions.checkState(foundObject != null,
+                "No entry found for the page[" + pageName + "], element[" + elementName +
+                        "] in the locators file [" + locatorFileName + "]");
+        String locator = foundObject.get("locator").getAsString();
+        String locatorUsing = foundObject.get("locateUsing").getAsString();
+        if (replaceValues != null && replaceValues.length > 0) {
+            locator = String.format(locator, replaceValues);
+        }
+        Preconditions.checkArgument(StringUtils.isNotEmpty(locator), "Locator cannot be null (or) empty.");
+        LocatorInfo locatorInfo = new LocatorInfo(locator, locatorUsing);
+        locators.put(key, locatorInfo);
+        logger.info("Locator: '{}' is created.", key);
+        return locatorInfo;
+    }
+
+    private static JsonObject findElementByPageNameAndElementName(String pageName, String elementName) {
         for (JsonElement outerElement : locatorArray) {
             JsonObject jsonObject = outerElement.getAsJsonObject();
             if (pageName.equalsIgnoreCase(jsonObject.get("pageName").getAsString())) {
@@ -164,7 +218,6 @@ public class ByFactory {
                 }
             }
         }
-
         return null;
     }
 
