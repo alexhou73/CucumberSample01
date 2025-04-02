@@ -156,7 +156,8 @@ public class BasePage {
         }
     }
 
-    public void setDataListByIndex(String name, String dataListId, int index) {
+    public void setDataListByIndex(String name, String dataListId, Integer index) {
+//        By byDataList = ByFactory.createBy(PAGE, "DataListById_Index", dataListId, String.valueOf(index));
         Optional<WebElement> selectInput = Optional.ofNullable(getWebElementByName(name));
         String xpath = String.format("//datalist[@id='%s']/option[%d]", dataListId, index);
         Optional<WebElement> option = Optional.ofNullable(getWebElementByXpath(xpath));
@@ -195,10 +196,12 @@ public class BasePage {
     }
 
     public void clickButton(String name) {
-        Optional<WebElement> button = Optional.ofNullable(driver.findElement(By.xpath("//button[contains(text(),'" + name + "')]")));
-        if (button.isPresent()) {
-            button.get().click();
-        }
+        By byButton = ByFactory.createBy(PAGE, "ButtonByText",name);
+        wait.until(ExpectedConditions.presenceOfElementLocated(byButton)).click();
+//        Optional<WebElement> button = Optional.ofNullable(driver.findElement(By.xpath("//button[contains(text(),'" + name + "')]")));
+//        if (button.isPresent()) {
+//            button.get().click();
+//        }
     }
 
     private void foo() {

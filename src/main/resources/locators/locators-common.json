@@ -11,6 +11,11 @@
         "elementName": "AnchorByText",
         "locateUsing": "xpath",
         "locator": "//a[contains(text(),'%s')]"
+      },
+      {
+        "elementName": "ButtonByText",
+        "locateUsing": "xpath",
+        "locator": "//button[contains(text(),'%s')]"
       }
     ]
   }
