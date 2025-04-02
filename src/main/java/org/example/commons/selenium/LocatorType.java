@@ -1,8 +1,6 @@
 package org.example.commons.selenium;
 
-import org.openqa.selenium.By;
-
-public enum Locator {
+public enum LocatorType {
     id,
     name,
     className,
@@ -12,7 +10,7 @@ public enum Locator {
     partialLinkText,
     xpath;
 
-    public static Locator convertLocator(String locateUsing) {
+    public static LocatorType convertLocatorType(String locateUsing) {
         switch (locateUsing){
             case "id":
                 return id;
@@ -31,7 +29,7 @@ public enum Locator {
             case "xpath":
                 return xpath;
             default:
-                throw new UnsupportedOperationException("The locator " + locateUsing + "is NOT Supported.");
+                throw new UnsupportedOperationException("The locator '" + locateUsing + "' is NOT Supported.");
         }
     }
 }

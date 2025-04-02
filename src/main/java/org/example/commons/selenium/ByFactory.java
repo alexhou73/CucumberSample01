@@ -24,34 +24,34 @@ public class ByFactory {
 
     private static class LocatorInfo {
         private String locator;
-        private Locator locateUsing;
+        private LocatorType locateUsing;
 
         public LocatorInfo(String locator, String locateUsing) {
             this.locator = locator;
             switch (locateUsing.toLowerCase()) {
                 case "id":
-                    this.locateUsing = Locator.id;
+                    this.locateUsing = LocatorType.id;
                     break;
                 case "name":
-                    this.locateUsing = Locator.name;
+                    this.locateUsing = LocatorType.name;
                     break;
                 case "classname":
-                    this.locateUsing = Locator.className;
+                    this.locateUsing = LocatorType.className;
                     break;
                 case "css":
-                    this.locateUsing = Locator.css;
+                    this.locateUsing = LocatorType.css;
                     break;
                 case "tagname":
-                    this.locateUsing = Locator.tagName;
+                    this.locateUsing = LocatorType.tagName;
                     break;
                 case "linktext":
-                    this.locateUsing = Locator.linkText;
+                    this.locateUsing = LocatorType.linkText;
                     break;
                 case "partiallinktext":
-                    this.locateUsing = Locator.partialLinkText;
+                    this.locateUsing = LocatorType.partialLinkText;
                     break;
                 case "xpath":
-                    this.locateUsing = Locator.xpath;
+                    this.locateUsing = LocatorType.xpath;
                     break;
                 default:
                     break;
@@ -62,7 +62,7 @@ public class ByFactory {
             return locator;
         }
 
-        public Locator getLocateUsing() {
+        public LocatorType getLocateUsing() {
             return locateUsing;
         }
     }

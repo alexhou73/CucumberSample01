@@ -3,6 +3,7 @@ package org.example;
 import org.apache.commons.lang3.StringUtils;
 import org.example.commons.Environment;
 import org.example.commons.WebDrivers;
+import org.example.commons.selenium.ByFactory;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
