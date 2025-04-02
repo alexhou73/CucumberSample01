@@ -16,6 +16,11 @@
         "elementName": "ButtonByText",
         "locateUsing": "xpath",
         "locator": "//button[contains(text(),'%s')]"
+      },
+      {
+        "elementName": "DataListById_Index",
+        "locateUsing": "xpath",
+        "locator": "//datalist[@id='%s']/option[%s]"
       }
     ]
   }

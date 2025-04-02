@@ -5,8 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -22,10 +20,14 @@ public class BasePage {
     protected WebDriverWait shortWait = null;
     protected WebDriverWait wait = null;
 
-    public BasePage(){
+    public BasePage() {
     }
 
 
+    public WebElement getWebElementBy(By by) {
+        Optional<WebElement> webElement = Optional.ofNullable(driver.findElement(by));
+        return webElement.isPresent() ? webElement.get() : null;
+    }
 
     public WebElement getWebElementById(String id) {
         Optional<WebElement> webElement = Optional.ofNullable(
@@ -157,10 +159,9 @@ public class BasePage {
     }
 
     public void setDataListByIndex(String name, String dataListId, Integer index) {
-//        By byDataList = ByFactory.createBy(PAGE, "DataListById_Index", dataListId, String.valueOf(index));
         Optional<WebElement> selectInput = Optional.ofNullable(getWebElementByName(name));
-        String xpath = String.format("//datalist[@id='%s']/option[%d]", dataListId, index);
-        Optional<WebElement> option = Optional.ofNullable(getWebElementByXpath(xpath));
+        By byOption = ByFactory.createBy(PAGE, "DataListById_Index", dataListId, String.valueOf(index));
+        Optional<WebElement> option = Optional.ofNullable(getWebElementBy(byOption));
         if (selectInput.isPresent() && option.isPresent()) {
             selectInput.get().clear();
             selectInput.get().sendKeys(option.get().getAttribute("value"));
@@ -196,16 +197,10 @@ public class BasePage {
     }
 
     public void clickButton(String name) {
-        By byButton = ByFactory.createBy(PAGE, "ButtonByText",name);
-        wait.until(ExpectedConditions.presenceOfElementLocated(byButton)).click();
-//        Optional<WebElement> button = Optional.ofNullable(driver.findElement(By.xpath("//button[contains(text(),'" + name + "')]")));
-//        if (button.isPresent()) {
-//            button.get().click();
-//        }
+        By byButton = ByFactory.createBy(PAGE, "ButtonByText", name);
+        Optional<WebElement> button = Optional.ofNullable(getWebElementBy(byButton));
+        if (button.isPresent()) {
+            button.get().click();
+        }
     }
-
-    private void foo() {
-
-    }
-
 }
