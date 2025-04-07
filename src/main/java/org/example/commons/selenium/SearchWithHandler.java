@@ -29,7 +29,7 @@ public class SearchWithHandler {
                     logger.info("WebElement: {}", webElement.getText());
                     field.setAccessible(true);
                     try {
-                        field.set(webDriver, webElement);
+                        field.set(page, webElement);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }

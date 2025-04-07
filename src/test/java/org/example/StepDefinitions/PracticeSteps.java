@@ -16,7 +16,7 @@ public class PracticeSteps extends BaseSteps {
 
     @Before
     public void beforeSuite() {
-        driver.get(url);
+//        driver.get(url);
         ByFactory.setLocatorFileName(Environment.INSTANCE.getPropertyByExactKey("locator"));
     }
 

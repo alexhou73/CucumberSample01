@@ -3,24 +3,34 @@ package org.example.pages;
 import org.apache.commons.lang3.StringUtils;
 import org.example.commons.Environment;
 import org.example.commons.selenium.ByFactory;
+import org.example.commons.selenium.SearchWith;
+import org.example.commons.selenium.SearchWithHandler;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HomePage extends BasePage {
-    private static final String HOME_URL = "url";
+    private Logger logger = LoggerFactory.getLogger(HomePage.class);
+    private static final String HOME_URL = "URL";
     private static final String PAGE = "HomePage";
     protected final static String homepageURL =
             StringUtils.isNotEmpty(System.getProperty(HOME_URL))
                     ? System.getProperty(HOME_URL)
                     : Environment.INSTANCE.getPropertyByExactKey(HOME_URL);
+    @SearchWith(pageName = PAGE, elementName = "H1ByTextX")
+    WebElement h1ByText;
 
     public HomePage(WebDriver webDriver) {
         driver = webDriver;
-        PageFactory.initElements(webDriver, this);
+        driver.get(homepageURL);
+        PageFactory.initElements(driver, this);
+        SearchWithHandler searchWithHandler = new SearchWithHandler(this.locatorUtil);
+        searchWithHandler.initElement(driver,this);
         wait = new WebDriverWait(driver, 600, 5000);
     }
 
@@ -32,6 +42,7 @@ public class HomePage extends BasePage {
     }
 
     public String getPageHeader(String header) {
+
         By byH1 = ByFactory.createBy(PAGE, "H1ByText", header);
         WebElement header1 = wait.until(ExpectedConditions.presenceOfElementLocated(byH1));
         return header1.getText();

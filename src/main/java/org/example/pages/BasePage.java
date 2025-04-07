@@ -1,6 +1,7 @@
 package org.example.pages;
 
 import org.example.commons.selenium.ByFactory;
+import org.example.commons.selenium.LocatorUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,6 +20,7 @@ public class BasePage {
     protected WebDriver driver;
     protected WebDriverWait shortWait = null;
     protected WebDriverWait wait = null;
+    protected LocatorUtil locatorUtil = new LocatorUtil("src/main/resources/locators-common.json");
 
     public BasePage() {
     }
