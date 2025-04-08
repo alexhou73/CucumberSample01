@@ -22,8 +22,8 @@ public class HomePage extends BasePage {
             StringUtils.isNotEmpty(System.getProperty(HOME_URL))
                     ? System.getProperty(HOME_URL)
                     : Environment.INSTANCE.getPropertyByExactKey(HOME_URL);
-    @SearchWith(pageName = PAGE, elementName = "H1ByTextX")
-    WebElement h1ByText;
+    @SearchWith(pageName = PAGE, elementName = "Title")
+    WebElement PageTitle;
 
     public HomePage(WebDriver webDriver) {
         driver = webDriver;

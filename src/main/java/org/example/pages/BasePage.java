@@ -20,7 +20,7 @@ public class BasePage {
     protected WebDriver driver;
     protected WebDriverWait shortWait = null;
     protected WebDriverWait wait = null;
-    protected LocatorUtil locatorUtil = new LocatorUtil("src/main/resources/locators-common.json");
+    protected LocatorUtil locatorUtil = new LocatorUtil("src/main/resources/locators/locators-common.json");
 
     public BasePage() {
     }
