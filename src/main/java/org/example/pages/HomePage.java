@@ -4,11 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.example.commons.Environment;
 import org.example.commons.selenium.ByFactory;
 import org.example.commons.selenium.SearchWith;
-import org.example.commons.selenium.SearchWithHandler;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -28,10 +26,9 @@ public class HomePage extends BasePage {
     public HomePage(WebDriver webDriver) {
         driver = webDriver;
         driver.get(homepageURL);
-        PageFactory.initElements(driver, this);
-        SearchWithHandler searchWithHandler = new SearchWithHandler(this.locatorUtil);
-        searchWithHandler.initElement(driver,this);
+        searchWithHandler.initElement(driver, this);
         wait = new WebDriverWait(driver, 600, 5000);
+        logger.info("PageTitle: {}", PageTitle.getText());
     }
 
 

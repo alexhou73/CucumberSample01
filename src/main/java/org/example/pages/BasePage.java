@@ -2,6 +2,7 @@ package org.example.pages;
 
 import org.example.commons.selenium.ByFactory;
 import org.example.commons.selenium.LocatorUtil;
+import org.example.commons.selenium.SearchWithHandler;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,8 +22,10 @@ public class BasePage {
     protected WebDriverWait shortWait = null;
     protected WebDriverWait wait = null;
     protected LocatorUtil locatorUtil = new LocatorUtil("src/main/resources/locators/locators-common.json");
+    protected SearchWithHandler searchWithHandler;
 
     public BasePage() {
+        searchWithHandler = new SearchWithHandler(this.locatorUtil);
     }
 
 
