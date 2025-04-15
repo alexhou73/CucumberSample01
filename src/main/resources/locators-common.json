@@ -1,0 +1,32 @@
+[
+  {
+    "pageName": "HomePage",
+    "elements": [
+      {
+        "elementName": "H1ByTextX",
+        "locateUsing": "xpath",
+        "locator": "//h1[contains(text(),'Hands-On Selenium WebDriver with Java')]"
+      },
+      {
+        "elementName": "H1ByText",
+        "locateUsing": "xpath",
+        "locator": "//h1[contains(text(),'%s')]"
+      },
+      {
+        "elementName": "AnchorByText",
+        "locateUsing": "xpath",
+        "locator": "//a[contains(text(),'%s')]"
+      },
+      {
+        "elementName": "ButtonByText",
+        "locateUsing": "xpath",
+        "locator": "//button[contains(text(),'%s')]"
+      },
+      {
+        "elementName": "DataListById_Index",
+        "locateUsing": "xpath",
+        "locator": "//datalist[@id='%s']/option[%s]"
+      }
+    ]
+  }
+]

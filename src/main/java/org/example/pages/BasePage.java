@@ -1,10 +1,14 @@
 package org.example.pages;
 
+import org.example.commons.selenium.ByFactory;
+import org.example.commons.selenium.LocatorUtil;
+import org.example.commons.selenium.SearchWithHandler;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,12 +16,22 @@ import java.util.Optional;
 
 public class BasePage {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected WebDriver driver;
+    private static final String PAGE = "HomePage";
 
-    public boolean userOnPage(String header) {
-        Optional<WebElement> pageHeader1 = Optional.ofNullable(
-                driver.findElement(By.xpath("//h1[contains(text(),'" + header + "')]")));
-        return pageHeader1.isPresent();
+    protected WebDriver driver;
+    protected WebDriverWait shortWait = null;
+    protected WebDriverWait wait = null;
+    protected LocatorUtil locatorUtil = new LocatorUtil("src/main/resources/locators/locators-common.json");
+    protected SearchWithHandler searchWithHandler;
+
+    public BasePage() {
+        searchWithHandler = new SearchWithHandler(this.locatorUtil);
+    }
+
+
+    public WebElement getWebElementBy(By by) {
+        Optional<WebElement> webElement = Optional.ofNullable(driver.findElement(by));
+        return webElement.isPresent() ? webElement.get() : null;
     }
 
     public WebElement getWebElementById(String id) {
@@ -149,10 +163,10 @@ public class BasePage {
         }
     }
 
-    public void setDataListByIndex(String name, String dataListId, int index) {
+    public void setDataListByIndex(String name, String dataListId, Integer index) {
         Optional<WebElement> selectInput = Optional.ofNullable(getWebElementByName(name));
-        String xpath = String.format("//datalist[@id='%s']/option[%d]", dataListId, index);
-        Optional<WebElement> option = Optional.ofNullable(getWebElementByXpath(xpath));
+        By byOption = ByFactory.createBy(PAGE, "DataListById_Index", dataListId, String.valueOf(index));
+        Optional<WebElement> option = Optional.ofNullable(getWebElementBy(byOption));
         if (selectInput.isPresent() && option.isPresent()) {
             selectInput.get().clear();
             selectInput.get().sendKeys(option.get().getAttribute("value"));
@@ -188,14 +202,10 @@ public class BasePage {
     }
 
     public void clickButton(String name) {
-        Optional<WebElement> button = Optional.ofNullable(driver.findElement(By.xpath("//button[contains(text(),'" + name + "')]")));
+        By byButton = ByFactory.createBy(PAGE, "ButtonByText", name);
+        Optional<WebElement> button = Optional.ofNullable(getWebElementBy(byButton));
         if (button.isPresent()) {
             button.get().click();
         }
     }
-
-    private void foo() {
-
-    }
-
 }

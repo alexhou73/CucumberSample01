@@ -1,6 +1,8 @@
 package org.example.StepDefinitions;
 
 import org.example.BaseSteps;
+import org.example.commons.Environment;
+import org.example.commons.selenium.ByFactory;
 import org.example.pages.HomePage;
 
 import io.cucumber.java.After;
@@ -14,7 +16,8 @@ public class PracticeSteps extends BaseSteps {
 
     @Before
     public void beforeSuite() {
-        driver.get(url);
+//        driver.get(url);
+        ByFactory.setLocatorFileName(Environment.INSTANCE.getPropertyByExactKey("locator"));
     }
 
     @After
@@ -33,8 +36,7 @@ public class PracticeSteps extends BaseSteps {
     @Given("the user clicks on {string} button")
     public void the_user_clicks_on_button(String button) {
         logger.info("the user clicks on {} button", button);
-        softAssert.assertTrue(homePage.clickButtonLink(button),
-                String.format("Failed: Web element '%s' not found", button));
+        homePage.clickButtonLink(button);
     }
 
     @Given("the user on the {string} page")

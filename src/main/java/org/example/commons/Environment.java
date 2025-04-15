@@ -8,9 +8,9 @@ import java.util.Properties;
 
 public class Environment {
     private static final String ENVIRONMENT_SETTINGS = "environment.properties";
-
     private static final Logger logger = LoggerFactory.getLogger(Environment.class);
     private static Environment environment = null;
+    private static Properties properties = null;
 
     private static Environment getEnvironment() {
         if (environment == null) {
@@ -18,10 +18,7 @@ public class Environment {
         }
         return environment;
     }
-
     public static Environment INSTANCE = getEnvironment();
-
-    protected Properties properties = null;
 
     public Environment() {
         logger.info("Loading properties from: {}", ENVIRONMENT_SETTINGS);
